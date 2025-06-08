@@ -7,7 +7,7 @@
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "build:prod": "ng build --configuration production --output-path dist/cmdesk/browser",
+    "build:prod": "ng build --configuration production --base-href / --output-path dist/cmdesk/browser",
     "build:validate": "powershell -File validate-build.ps1",
     "serve:prod": "http-server dist/cmdesk/browser -p 8080 --cors",
     "docker:build": "docker build -t cmdesk .",
