@@ -5,31 +5,33 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist/cmdesk/browser",
         "buildCommand": "npm run build:prod",
-        "installCommand": "npm install",
-        "outputDirectory": "dist/cmdesk/browser"
+        "installCommand": "npm install"
       }
     }
   ],
-  "routes": [
+  "rewrites": [
+    { "source": "/assets/:path*", "destination": "/assets/:path*" },
+    { "source": "/:path*", "destination": "/index.html" }
+  ],
+  "headers": [
     {
-      "handle": "filesystem"
+      "source": "/assets/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     },
     {
-      "src": "/assets/(.*)",
-      "headers": { "cache-control": "public, max-age=31536000, immutable" },
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/(.*)\\.(?:js|css|ico|json|png|jpg|jpeg|svg|webp)$",
-      "headers": { "cache-control": "public, max-age=31536000, immutable" },
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "headers": { "cache-control": "public, max-age=0, must-revalidate" },
-      "dest": "/index.html"
+      "source": "/(.*)\\.(?:js|css|ico|json|png|jpg|jpeg|svg|webp)$",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
   ]
 }
