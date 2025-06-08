@@ -7,21 +7,29 @@
       "config": {
         "distDir": "dist/cmdesk/browser",
         "buildCommand": "npm run build:prod",
-        "installCommand": "npm install"
+        "installCommand": "npm install",
+        "outputDirectory": "dist/cmdesk/browser"
       }
     }
   ],
-  "rewrites": [
-    { "source": "/((?!api/.*).*)", "destination": "/index.html" }
-  ],
-  "headers": [
+  "routes": [
     {
-      "source": "/assets/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      "handle": "filesystem"
     },
     {
-      "source": "/(.*)\\.(?:js|css|json|ico|png|jpg|jpeg|svg|txt)$",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      "src": "/assets/(.*)",
+      "headers": { "cache-control": "public, max-age=31536000, immutable" },
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(.*)\\.(?:js|css|ico|json|png|jpg|jpeg|svg|webp)$",
+      "headers": { "cache-control": "public, max-age=31536000, immutable" },
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "headers": { "cache-control": "public, max-age=0, must-revalidate" },
+      "dest": "/index.html"
     }
   ]
 }
