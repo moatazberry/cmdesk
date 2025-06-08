@@ -1,0 +1,97 @@
+.tickets-container {
+  padding: 24px;
+
+  .tickets-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h1 {
+      margin: 0;
+    }
+  }
+
+  .filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    background: #f5f5f5;
+    padding: 16px;
+    border-radius: 8px;
+
+    .filter-field {
+      flex: 1;
+      min-width: 200px;
+      max-width: 300px;
+    }
+
+    button {
+      align-self: center;
+    }
+  }
+
+  table {
+    width: 100%;
+
+    .mat-column-actions {
+      width: 80px;
+      text-align: center;
+    }
+
+    .mat-column-id {
+      width: 100px;
+    }
+
+    .mat-column-status,
+    .mat-column-priority {
+      width: 120px;
+    }
+
+    .mat-column-createdAt {
+      width: 180px;
+    }
+
+    .mat-column-assignedTo {
+      width: 150px;
+    }
+
+    td.mat-cell {
+      padding: 16px 8px;
+    }
+
+    .mat-mdc-chip {
+      color: white;
+      font-weight: 500;
+    }
+  }
+
+  mat-paginator {
+    margin-top: 20px;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .tickets-container {
+    padding: 10px;
+
+    .tickets-header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+
+      button {
+        width: 100%;
+      }
+    }
+
+    table {
+      .mat-column-createdAt,
+      .mat-column-assignedTo {
+        display: none;
+      }
+    }
+  }
+}

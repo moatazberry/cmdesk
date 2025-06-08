@@ -1,0 +1,111 @@
+<div class="ticket-detail-container">
+  @if (ticket) {
+    <mat-card class="ticket-card">
+      <mat-card-header>
+        <div class="header-content">
+          <div class="title-section">
+            <mat-card-title>{{ticket.title}}</mat-card-title>
+            <mat-card-subtitle>Ticket #{{ticket.id}}</mat-card-subtitle>
+          </div>
+          <div class="status-section">
+            <mat-chip [style.background-color]="getStatusColor(ticket.status)">
+              {{ticket.status}}
+            </mat-chip>
+            <mat-chip [style.background-color]="getPriorityColor(ticket.priority)">
+              {{ticket.priority}}
+            </mat-chip>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="ticket-info">
+          <p class="description">{{ticket.description}}</p>
+          
+          <div class="meta-info">
+            <p><strong>Created By:</strong> {{ticket.createdBy}}</p>
+            <p><strong>Created:</strong> {{ticket.createdAt | date:'medium'}}</p>
+            <p><strong>Last Updated:</strong> {{ticket.updatedAt | date:'medium'}}</p>
+            <p><strong>Assigned To:</strong> {{ticket.assignedTo || 'Unassigned'}}</p>
+            <p><strong>Category:</strong> {{ticket.category}}</p>
+          </div>
+
+          @if (ticket.attachments?.length) {
+            <div class="attachments">
+              <h3>Attachments</h3>
+              <div class="attachment-list">
+                @for (attachment of ticket.attachments; track attachment) {
+                  <a href="{{attachment}}" target="_blank" class="attachment-link">
+                    <mat-icon>attachment</mat-icon>
+                    {{attachment.split('/').pop()}}
+                  </a>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <mat-divider class="divider"></mat-divider>
+
+        <div class="status-update">
+          <h3>Update Status</h3>
+          <div class="status-buttons">
+            @for (status of ticketStatuses; track status) {
+              <button 
+                mat-raised-button
+                [color]="ticket.status === status ? 'primary' : 'default'"
+                (click)="updateStatus(status)">
+                {{status}}
+              </button>
+            }
+          </div>
+        </div>
+
+        <mat-divider class="divider"></mat-divider>
+
+        <div class="comments-section">
+          <h3>Comments</h3>
+          
+          <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="comment-form">
+            <mat-form-field class="full-width">
+              <mat-label>Add a comment</mat-label>
+              <textarea matInput formControlName="content" rows="3"></textarea>
+            </mat-form-field>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid">
+              Add Comment
+            </button>
+          </form>
+
+          <div class="comments-list">
+            @if (ticket.comments?.length) {
+              @for (comment of ticket.comments; track comment) {
+                <mat-card class="comment-card">
+                  <mat-card-header>
+                    <mat-card-title>{{comment.createdBy}}</mat-card-title>
+                    <mat-card-subtitle>{{comment.createdAt | date:'medium'}}</mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <p>{{comment.content}}</p>
+                  </mat-card-content>
+                </mat-card>
+              }
+            } @else {
+              <p class="no-comments">No comments yet</p>
+            }
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button color="primary" routerLink="/tickets">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Tickets
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  } @else {
+    <div class="loading">
+      Loading ticket details...
+    </div>
+  }
+</div>

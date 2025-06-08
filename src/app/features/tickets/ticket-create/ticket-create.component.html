@@ -1,0 +1,117 @@
+<div class="ticket-create-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Create New Ticket</mat-card-title>
+      <mat-card-subtitle>Fill in the details below to create a new support ticket</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="full-width">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter a brief title">
+          <ng-container *ngIf="ticketForm.get('title')?.invalid && ticketForm.get('title')?.touched">
+            <mat-error>
+              <ng-container *ngIf="ticketForm.get('title')?.errors?.['required']">Title is required</ng-container>
+              <ng-container *ngIf="ticketForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters long</ng-container>
+            </mat-error>
+          </ng-container>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <ng-container *ngFor="let category of categories; trackBy: trackByFn">
+              <mat-option [value]="category">{{category}}</mat-option>
+            </ng-container>
+          </mat-select>
+          <ng-container *ngIf="ticketForm.get('category')?.invalid && ticketForm.get('category')?.touched">
+            <mat-error>Category is required</mat-error>
+          </ng-container>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Priority</mat-label>
+          <mat-select formControlName="priority">
+            <ng-container *ngFor="let priority of priorities; trackBy: trackByFn">
+              <mat-option [value]="priority">{{priority}}</mat-option>
+            </ng-container>
+          </mat-select>
+          <ng-container *ngIf="ticketForm.get('priority')?.invalid && ticketForm.get('priority')?.touched">
+            <mat-error>Priority is required</mat-error>
+          </ng-container>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea 
+            matInput 
+            formControlName="description" 
+            placeholder="Provide a detailed description of your issue"
+            rows="6">
+          </textarea>
+          <ng-container *ngIf="ticketForm.get('description')?.invalid && ticketForm.get('description')?.touched">
+            <mat-error>
+              <ng-container *ngIf="ticketForm.get('description')?.errors?.['required']">Description is required</ng-container>
+              <ng-container *ngIf="ticketForm.get('description')?.errors?.['minlength']">Description must be at least 20 characters long</ng-container>
+            </mat-error>
+          </ng-container>
+        </mat-form-field>
+
+        <div class="file-upload-section">
+          <div class="file-upload-header">
+            <h3>Attachments</h3>
+            <button 
+              mat-raised-button 
+              color="primary" 
+              type="button"
+              (click)="fileInput.click()">
+              <mat-icon>attach_file</mat-icon>
+              Add Files
+            </button>
+            <input 
+              #fileInput
+              type="file"
+              hidden
+              multiple
+              (change)="onFileSelected($event)"
+              accept=".jpg,.jpeg,.png,.gif,.pdf,.txt">
+          </div>
+
+          <div class="file-list">
+            <ng-container *ngFor="let file of selectedFiles; let i = index">
+              <mat-chip class="file-chip">
+                <mat-icon matChipAvatar>attach_file</mat-icon>
+                <span class="file-name">{{file.name}}</span>
+                <span class="file-size">({{(file.size / 1024).toFixed(1)}} KB)</span>
+                <button matChipRemove (click)="removeFile(i)">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+            </ng-container>
+          </div>
+
+          <ng-container *ngIf="selectedFiles.length > 0">
+            <p class="file-info">
+              <mat-icon>info</mat-icon>
+              {{selectedFiles.length}} file(s) selected
+            </p>
+          </ng-container>
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" routerLink="/tickets">
+            Cancel
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit"
+            [disabled]="ticketForm.invalid">
+            Create Ticket
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

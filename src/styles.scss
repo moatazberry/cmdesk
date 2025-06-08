@@ -1,0 +1,75 @@
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+// Include Material CSS
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+// Include common styles
+@include mat.core();
+
+// Custom CSS Variables for our brand colors
+:root {
+  --primary-color: #2a2f4f;
+  --primary-lighter: #e8e9f3;
+  --primary-darker: #1b1e33;
+  --accent-color: #917fb3;
+  --accent-lighter: #e9e3f2;
+  --accent-darker: #746291;
+}
+
+// Override some Material styles with our custom colors
+.mat-mdc-button.mat-primary {
+  background-color: var(--primary-color);
+}
+
+.mat-mdc-button.mat-accent {
+  background-color: var(--accent-color);
+}
+
+// Global styles
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fafafa;
+}
+
+.mat-typography {
+  h1 {
+    margin-bottom: 1rem;
+  }
+}
+
+// Utility classes
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }

@@ -1,0 +1,104 @@
+<div class="dashboard-container">
+  <div class="stats-cards">
+    <mat-card class="stat-card total">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-info">
+            <span class="stat-value">{{stats.total}}</span>
+            <span class="stat-label">Total Tickets</span>
+          </div>
+          <mat-icon>confirmation_number</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card open">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-info">
+            <span class="stat-value">{{stats.open}}</span>
+            <span class="stat-label">Open Tickets</span>
+          </div>
+          <mat-icon>fiber_new</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card in-progress">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-info">
+            <span class="stat-value">{{stats.inProgress}}</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+          <mat-icon>pending</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card high-priority">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-info">
+            <span class="stat-value">{{stats.highPriority}}</span>
+            <span class="stat-label">High Priority</span>
+          </div>
+          <mat-icon>priority_high</mat-icon>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="recent-tickets">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Recent Tickets</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <table mat-table [dataSource]="recentTickets">
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let ticket">
+              <a [routerLink]="['/tickets', ticket.id]">{{ticket.title}}</a>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let ticket">
+              <mat-chip [style.background-color]="getStatusColor(ticket.status)">
+                {{ticket.status}}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef>Priority</th>
+            <td mat-cell *matCellDef="let ticket">
+              <mat-chip [style.background-color]="getPriorityColor(ticket.priority)">
+                {{ticket.priority}}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Created</th>
+            <td mat-cell *matCellDef="let ticket">
+              {{ticket.createdAt | date:'medium'}}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <div class="view-all">
+          <button mat-button color="primary" routerLink="/tickets">
+            View All Tickets
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
