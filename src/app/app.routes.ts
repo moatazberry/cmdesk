@@ -49,6 +49,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/tickets/ticket-detail/ticket-detail.component').then(m => m.TicketDetailComponent)
       }
     ]
+  },  {
+    path: 'customers',
+    loadChildren: () => import('./features/customers/customers.module').then(m => m.CustomersModule),
+    canActivate: [authGuard]
   },
   {
     path: '**',

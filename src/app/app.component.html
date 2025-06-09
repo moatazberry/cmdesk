@@ -35,10 +35,13 @@
         <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
           <mat-icon matListItemIcon>dashboard</mat-icon>
           <span matListItemTitle>Dashboard</span>
-        </a>
-        <a mat-list-item routerLink="/tickets" routerLinkActive="active">
+        </a>        <a mat-list-item routerLink="/tickets" routerLinkActive="active">
           <mat-icon matListItemIcon>confirmation_number</mat-icon>
           <span matListItemTitle>Tickets</span>
+        </a>
+        <a mat-list-item routerLink="/customers" routerLinkActive="active">
+          <mat-icon matListItemIcon>people</mat-icon>
+          <span matListItemTitle>Customers</span>
         </a>
         @if (isAdmin) {
           <a mat-list-item routerLink="/admin" routerLinkActive="active">
