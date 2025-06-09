@@ -1,12 +1,8 @@
 {
-  "framework": "angular",
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "installCommand": "npm install",
-  "buildCommand": "ng build --configuration production",
-  "outputDirectory": "dist/cmdesk/browser"
+  ]
 }
