@@ -2,6 +2,6 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "index.html"
+      "destination": "dist/cmdesk/browser/browser/index.html"
     }
   ]}
