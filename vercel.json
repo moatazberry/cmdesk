@@ -7,9 +7,11 @@
   ],
   "builds": [
     {
-      "src": "angular.json",
-      "use": "@vercel/angular@latest",
-      "config": { "outputDirectory": "dist/cmdesk/browser" }
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/cmdesk/browser"
+      }
     }
   ]
 }
