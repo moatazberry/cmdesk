@@ -29,7 +29,7 @@
 </mat-toolbar>
 
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="side" [opened]="isAuthenticated">
+  <mat-sidenav #sidenav [mode]="'over'" [opened]="false" [autoFocus]="false">
     @if (isAuthenticated) {
       <mat-nav-list>
         <a mat-list-item routerLink="/dashboard" routerLinkActive="active">

@@ -5,7 +5,7 @@
 }
 
 .app-toolbar {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -15,7 +15,9 @@
   .brand {
     display: flex;
     align-items: center;
-    margin-left: 16px;    .brand-logo {
+    margin-left: 16px;
+
+    .brand-logo {
       height: 52px;
       margin-right: 12px;
     }
@@ -27,13 +29,23 @@ spacer {
 }
 
 mat-sidenav-container {
-  height: 100%;
-  margin-top: 64px; // Height of the toolbar
+  height: calc(100% - 64px); // Subtract toolbar height
+  display: flex;
 
   mat-sidenav {
     width: 250px;
     background-color: #ffffff;
     border-right: 1px solid rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+
+    @media (max-width: 768px) {
+      position: fixed;
+      transform: translateX(-100%);
+
+      &.mat-drawer-opened {
+        transform: translateX(0);
+      }
+    }
 
     mat-nav-list {
       padding-top: 0;
@@ -61,6 +73,13 @@ mat-sidenav-container {
   }
 
   mat-sidenav-content {
+    flex: 1;
+    margin-left: 250px; // Same as sidenav width
+
+    @media (max-width: 768px) {
+      margin-left: 0;
+    }
+
     .content {
       padding: 20px;
       max-width: 1400px;
