@@ -24,8 +24,17 @@
   }
 }
 
-spacer {
+.spacer {
   flex: 1 1 auto;
+}
+
+.app-toolbar {
+  display: flex;
+  align-items: center;
+
+  .user-menu {
+    margin-left: auto;
+  }
 }
 
 mat-sidenav-container {

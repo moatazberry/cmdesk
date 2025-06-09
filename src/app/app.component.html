@@ -14,17 +14,18 @@
   <div class="brand">
     <img src="assets/img/logo.png" alt="Crystal Mind Logo" class="brand-logo">
   </div>
-  <span class="spacer"></span>
-  @if (isAuthenticated) {
-    <button mat-icon-button [matMenuTriggerFor]="userMenu">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-    <mat-menu #userMenu="matMenu">
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>exit_to_app</mat-icon>
-        <span>Logout</span>
+  <span class="spacer"></span>  @if (isAuthenticated) {
+    <div class="user-menu">
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
       </button>
-    </mat-menu>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
   }
 </mat-toolbar>
 

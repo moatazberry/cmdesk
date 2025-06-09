@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { Customer } from '../../../core/models/customer.interface';
 import { CustomerService } from '../../../core/services/customer.service';
 
@@ -69,10 +70,10 @@ import { CustomerService } from '../../../core/services/customer.service';
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                 <td mat-cell *matCellDef="let row">
-                  <button mat-icon-button color="primary" (click)="viewCustomer(row)">
+                  <button mat-icon-button color="primary" (click)="viewCustomer(row.id)">
                     <mat-icon>visibility</mat-icon>
                   </button>
-                  <button mat-icon-button color="warn" (click)="deleteCustomer(row)">
+                  <button mat-icon-button color="warn" (click)="deleteCustomer(row.id)">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </td>
@@ -108,9 +109,10 @@ import { CustomerService } from '../../../core/services/customer.service';
     }
   `]
 })
-export class CustomerListComponent implements OnInit {
+export class CustomerListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'email', 'phone', 'company', 'actions'];
-  dataSource: MatTableDataSource<Customer>;
+  dataSource: MatTableDataSource<Customer> = new MatTableDataSource();
+  private destroy$ = new Subject<void>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -118,20 +120,47 @@ export class CustomerListComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private router: Router
-  ) {
-    this.dataSource = new MatTableDataSource();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadCustomers();
   }
 
-  loadCustomers(): void {
-    this.customerService.getCustomers().subscribe(customers => {
-      this.dataSource = new MatTableDataSource(customers);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private loadCustomers(): void {
+    this.customerService.getCustomers()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(customers => {
+        this.dataSource = new MatTableDataSource(customers);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
+  }
+
+  createCustomer(): void {
+    this.router.navigate(['/customers/create']);
+  }
+
+  viewCustomer(id: string): void {
+    this.router.navigate(['/customers', id]);
+  }
+
+  editCustomer(id: string): void {
+    this.router.navigate(['/customers', id, 'edit']);
+  }
+
+  deleteCustomer(id: string): void {
+    if (confirm('Are you sure you want to delete this customer?')) {
+      this.customerService.deleteCustomer(id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.loadCustomers();
+        });
+    }
   }
 
   applyFilter(event: Event): void {
@@ -140,22 +169,6 @@ export class CustomerListComponent implements OnInit {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
-    }
-  }
-
-  createCustomer(): void {
-    this.router.navigate(['/customers/create']);
-  }
-
-  viewCustomer(customer: Customer): void {
-    this.router.navigate(['/customers', customer.id]);
-  }
-
-  deleteCustomer(customer: Customer): void {
-    if (confirm('Are you sure you want to delete this customer?')) {
-      this.customerService.deleteCustomer(customer.id!).subscribe(() => {
-        this.loadCustomers();
-      });
     }
   }
 }

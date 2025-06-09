@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,10 +6,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CustomerService } from '../../../core/services/customer.service';
 
 @Component({
   selector: 'app-customer-create',
+  templateUrl: './customer-create.component.html',
+  styleUrls: ['./customer-create.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -17,89 +20,21 @@ import { CustomerService } from '../../../core/services/customer.service';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
-  ],
-  template: `
-    <div class="container">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Create New Customer</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
-            <mat-form-field>
-              <mat-label>Name</mat-label>
-              <input matInput formControlName="name">
-              <mat-error *ngIf="customerForm.get('name')?.hasError('required')">
-                Name is required
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Email</mat-label>
-              <input matInput formControlName="email">
-              <mat-error *ngIf="customerForm.get('email')?.hasError('required')">
-                Email is required
-              </mat-error>
-              <mat-error *ngIf="customerForm.get('email')?.hasError('email')">
-                Please enter a valid email
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Phone</mat-label>
-              <input matInput formControlName="phone">
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Company</mat-label>
-              <input matInput formControlName="company">
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label>Address</mat-label>
-              <textarea matInput formControlName="address"></textarea>
-            </mat-form-field>
-
-            <div class="actions">
-              <button mat-raised-button color="primary" type="submit" [disabled]="!customerForm.valid">
-                Create
-              </button>
-              <button mat-raised-button type="button" (click)="goBack()">
-                Cancel
-              </button>
-            </div>
-          </form>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  `,
-  styles: [`
-    .container {
-      padding: 20px;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .actions {
-      display: flex;
-      gap: 16px;
-      margin-top: 16px;
-    }
-  `]
+    MatButtonModule,
+    MatSnackBarModule
+  ]
 })
-export class CustomerCreateComponent {
+export class CustomerCreateComponent implements OnInit {
   customerForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private customerService: CustomerService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.customerForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone: [''],
       company: [''],
@@ -107,16 +42,32 @@ export class CustomerCreateComponent {
     });
   }
 
+  ngOnInit(): void {}
+
   onSubmit(): void {
     if (this.customerForm.valid) {
-      this.customerService.createCustomer(this.customerForm.value)
-        .subscribe(() => {
+      this.customerService.createCustomer(this.customerForm.value).subscribe({
+        next: () => {
+          this.snackBar.open('Customer created successfully', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
           this.router.navigate(['/customers']);
-        });
+        },
+        error: (error) => {
+          this.snackBar.open('Error creating customer', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+          console.error('Error creating customer:', error);
+        }
+      });
     }
   }
 
-  goBack(): void {
+  onCancel(): void {
     this.router.navigate(['/customers']);
   }
 }

@@ -94,10 +94,9 @@ import { CustomerService } from '../../../core/services/customer.service';
     }
   `]
 })
-export class CustomerDetailComponent implements OnInit {
-  customerForm: FormGroup;
+export class CustomerDetailComponent implements OnInit {  customerForm: FormGroup;
   isEditing = false;
-  customerId?: number;
+  customerId?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -113,10 +112,10 @@ export class CustomerDetailComponent implements OnInit {
       address: ['']
     });
   }
-
   ngOnInit(): void {
-    this.customerId = Number(this.route.snapshot.paramMap.get('id'));
-    if (this.customerId) {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      this.customerId = idParam;
       this.loadCustomer();
     }
   }
