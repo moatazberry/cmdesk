@@ -1,28 +1,35 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist/cmdesk/browser",
-        "buildCommand": "npm run build:prod",
-        "installCommand": "npm install"
-      }
-    }
-  ],
+  "buildCommand": "npm run build:prod",
+  "outputDirectory": "dist/cmdesk/browser",
+  "framework": "angular",
   "routes": [
-    { "handle": "filesystem" },
     {
-      "src": "/assets/(.*)",
+      "src": "^/assets/(.*)$",
       "dest": "/assets/$1"
     },
     {
-      "src": "/favicon.ico",
+      "src": "^/favicon\\.ico$",
       "dest": "/favicon.ico"
     },
     {
-      "src": "/(.*)",
+      "src": "^/manifest\\.webmanifest$",
+      "dest": "/manifest.webmanifest"
+    },
+    {
+      "src": "^/polyfills-.*\\.js$",
+      "dest": "/polyfills-B6TNHZQ6.js"
+    },
+    {
+      "src": "^/main-.*\\.js$",
+      "dest": "/main-67HXV7X3.js"
+    },
+    {
+      "src": "^/styles-.*\\.css$",
+      "dest": "/styles-75R5ZY5O.css"
+    },
+    {
+      "src": ".*",
       "dest": "/index.html"
     }
   ],
