@@ -25,7 +25,25 @@
       ]
     },
     {
-      "source": "/(.*)\\.(?:js|css|ico|json|png|jpg|jpeg|svg|webp)$",
+      "source": "/:path*.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/:path*.css",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/:path*.(jpg|jpeg|png|gif|ico|svg|webp)",
       "headers": [
         {
           "key": "Cache-Control",
