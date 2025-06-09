@@ -16,30 +16,25 @@ import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
-  { path: '', component: CustomerListComponent },
-  { path: 'create', component: CustomerCreateComponent },
-  { path: ':id', component: CustomerDetailComponent }
+  { 
+    path: '', 
+    loadComponent: () => import('./customer-list/customer-list.component').then(m => m.CustomerListComponent)
+  },
+  { 
+    path: 'create', 
+    loadComponent: () => import('./customer-create/customer-create.component').then(m => m.CustomerCreateComponent)
+  },
+  { 
+    path: ':id', 
+    loadComponent: () => import('./customer-detail/customer-detail.component').then(m => m.CustomerDetailComponent)
+  }
 ];
 
 @NgModule({
-  declarations: [
-    CustomerListComponent,
-    CustomerDetailComponent,
-    CustomerCreateComponent
-  ],
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(routes),
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCardModule,
-    ReactiveFormsModule
+    RouterModule.forChild(routes)
   ]
 })
 export class CustomersModule { }
